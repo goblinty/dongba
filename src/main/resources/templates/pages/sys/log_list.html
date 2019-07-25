@@ -1,0 +1,251 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-header">
+				<h3 class="box-title">日志管理</h3>
+
+				<div class="box-tools">
+					<div class="input-group input-group-sm" style="width: 350px;">
+						<input type="text" name="table_search" id="searchNameId"
+							   class="form-control pull-right" placeholder="用户名">
+
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-default btn-search">
+								<i class="fa fa-search"></i>
+							</button>
+							<button type="button" class="btn btn-default btn-delete">删除</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body table-responsive no-padding">
+				<table class="table table-hover">
+					<thead>
+					<tr>
+						<th><input type="checkbox" id="checkAll">全选</th>
+						<th>用户名</th>
+						<th>操作</th>
+						<th>请求方法</th>
+						<th>请求参数</th>
+						<th>IP地址</th>
+						<th>执行时间</th>
+					</tr>
+					</thead>
+					<tbody id="tbodyId">
+					<tr>
+						<td colspan="7">数据加载中...</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<div id="pageId" class="box-footer clearfix">
+
+			</div>
+			<!-- /.box-body -->
+		</div>
+		<!-- /.box -->
+	</div>
+</div>
+<script type="text/javascript">
+
+	$(function(){
+		//在pageid指定位置访问 doPageUI,将访问到的资源插入到 pageid
+		$("#pageId").load("doPageUI",function(){
+			//页面加载完成之后再去加载数据
+			doGetObjects();
+		});
+
+		//注册查询按钮事件
+		$(".input-group-btn").on("click",".btn-search",doQueryObjects);
+
+		//注册删除事件
+		$(".input-group-btn").on("click",".btn-delete",doDeleteObjects);
+
+		//注册点击全选矿的事件
+		$("#checkAll").click(doChangeTBodyCheckBoxState);
+
+		//注册tbody中checkbox对象事件
+		$("#tbodyId")
+				.on("click",".cBox",doChangeTHeadCheckBoxState)
+	});
+
+	//扩展业务 当在最后一页执行删除操作时,我们的页面跳转应该回到上一页,如何实现呢?
+	function doSetPageCurrentInlog(){
+
+		var pageCount = $("#pageId").data("pageCount");
+		var pageCurrent = $("#pageId").data("pageCurrent");
+		var checked = $("#checkAll").prop("checked");
+
+		console.log("执行减法 之前")
+		console.log(pageCount+" "+pageCurrent)
+		if(pageCurrent == pageCount && pageCurrent>1 &&checked){
+			console.log("执行减法")
+			pageCurrent--;
+			$("#pageId").data("pageCurrent",pageCurrent);
+		}
+	}
+
+	//当tbody中checkbox的状态发生变化以后
+	//修改thead中全选元素的状态值
+	//根据其他框 来修改全选框
+	function doChangeTHeadCheckBoxState(){
+
+		//设定默认状态
+		var flag = true;
+		//迭代所有 tbody 中 的 checkedbox 的值 并且 进行 与操作
+		$("#tbodyId input[name='cItem']").each(function(){
+			flag = flag&$(this).prop("checked");
+		})
+
+		//修改 全选元素 checkbox 的值为 flag
+		$("#checkAll").prop("checked",flag);
+
+		console.log("点击全选框")
+	}
+
+	//根据 全选框来 影响 其他框的状态
+	function doChangeTBodyCheckBoxState(){
+
+		//获取当前状态
+		var flag = $(this).prop("checked");
+		//将tbody 所有checkbox 的值 都改成 flag 的值
+
+		$("#tbodyId input[type='checkbox']").prop("checked",flag);
+	}
+
+	//单个或者多个(非全选)删除事件处理
+	function doDeleteObjects(){
+		//debugger
+		//1 获取选中的id
+		var ids = doGetCheckedIds();
+		if(ids.length == 0){
+			alert("请至少选择一个id");
+			return;
+		}
+
+		if(!confirm("确定删除吗")) return;
+		//发送请求删除
+		var url = "log/doDeleteObjById";
+		var params = {"ids":ids.toString()};
+
+		$.post(url,params,function(result){
+
+			if(result.state == 1){
+				alert(result.message);
+
+				doSetPageCurrentInlog();
+				doGetObjects();
+			}else{
+				alert(result.message);
+			}
+		})
+
+	}
+
+	//获取选中的记录并且存到数组
+	function doGetCheckedIds(){
+
+		//定义一个数组
+		var array=[];
+		//获取tbody 中类型是 checkbox 的 input 元素  并且迭代，每发现一个就执行如下回调函数
+		$("#tbodyId input[type=checkbox]").each(function(){
+
+			//如果此元素的 checked 属性 为 true ，就 使用数组的 push 存到数组中
+			if($(this).prop("checked")){
+
+				array.push($(this).val());
+			}
+		})
+
+		return array;
+	}
+
+	//查询按钮事件处理函数
+	function doQueryObjects(){
+
+		console.log("doQueryObjects()");
+		//初始化 页码 pagecurrent 的值为1   在查询的时候，页码初始值也应该是第一页
+		$("#pageId").data("pageCurrent",1);
+		//重用doget 函数
+		doGetObjects();
+	}
+
+
+	//定义分页查询的函数，点进
+	function doGetObjects(){
+		//debugger;//断点调试
+		$("#checkAll").prop("checked",false);
+		//1.定义url和参数
+		var url="log/doFindPageObjects";
+		//? 请问data函数的含义是什么？(从指定元素上获取绑定的数据)
+		//此数据会在何时进行绑定？(setPagination,doQueryObjects)
+		var pageCurrent=$("#pageId").data("pageCurrent");
+		//为什么要执行如下语句的判定，然后初始化pageCurrent的值为1
+		//pageCurrent参数在没有赋值的情况下，默认初始值应该为1.
+		if(!pageCurrent)pageCurrent=1;
+		var params={"pageCurrent":pageCurrent};//pageCurrent=2
+
+		//此位置要获取查询参数的值 重用
+		var username = $("#searchNameId").val();
+		//动态 在 js 对象之中添加 k/v
+		if(username) {params.username = username} //查询的时候要用 params.的 username 一定要和 controller层的参数一样
+
+		//2.发起异步请求
+		//请问如下ajax请求的回调函数参数名可以是任意吗？可以,必须符合标识符的规范
+		$.getJSON(url,params,function(result){//jsonResult
+
+			console.log(result.data)
+			//处理响应结果
+			doHandleResponseResult(result);
+		});
+	}
+
+	//设置异步响应结果
+	function doHandleResponseResult(result){
+
+		//1 是正常数据  1 呈现记录信息   2，呈现分页信息
+		if(result.state == 1){
+			//更新 table 中 tbody 内部的数据
+			doSetTableBodyRows(result.data.records);//将数据呈现在 页面上
+			//更新页面 page.html 的数据
+
+			doSetPagination(result.data); //此方法写到page.html中
+
+		}else{
+			alert(result.message);//存疑
+		}
+	}
+
+	//设置表格内容
+	function doSetTableBodyRows(records){
+
+		//获取tbody 对象，并且清空对象
+		var tBody = $("#tbodyId");
+		tBody.empty();
+		//迭代records记录，并且记录到i tbody
+		for(var i in records){
+			//构建 tr 对象
+			var tr = $("<tr></tr>");
+			//构建tds 对象
+			var tds = doCreateTds(records[i]);
+			//将tds追加到 tr里
+			tr.append(tds);
+			//将 tr加到 tbody 里
+			tBody.append(tr);
+		}
+	}
+
+	function doCreateTds(data){
+
+		var tds = "<td><input type='checkbox' class='cBox' name ='cItem' value = '"+data.id+"'></td>"+
+				"<td>"+data.username+"</td>"+
+				"<td>"+data.operation+"</td>"+
+				"<td>"+data.method+"</td>"+
+				"<td>"+data.params+"</td>"+
+				"<td>"+data.ip+"</td>"+
+				"<td>"+data.time+"</td>";
+
+		return tds;
+	}
+</script>
