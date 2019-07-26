@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.dongba.dao.TyLogDao">
+
+    <sql id="tongyong">
+        <where>
+            <if test="username != null and username != ''">
+                username like concat("%",#{username},"%")
+            </if>
+        </where>
+    </sql>
+
+    <select id="findPageLogs" resultType="com.ty.dongba.entity.TyLog">
+        select * from ty_logs <include refid="tongyong"></include>
+    </select>
+
+<!--    <select id="getRowCount" resultType="int">
+        select count(*) from ty_logs <include refid="tongyong"></include>
+    </select>-->
+
+    <delete id="deleteLogsByIds">
+        delete from ty_logs where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertLog">
+        insert into sys_logs
+       (username,operation,method,params,time,ip,createdTime)
+       values
+      (#{username},#{operation},#{method},#{params},#{time},#{ip},#{createdTime})
+    </insert>
+</mapper>

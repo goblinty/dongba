@@ -73,6 +73,7 @@
 	//扩展业务 当在最后一页执行删除操作时,我们的页面跳转应该回到上一页,如何实现呢?
 	function doSetPageCurrentInlog(){
 
+
 		var pageCount = $("#pageId").data("pageCount");
 		var pageCurrent = $("#pageId").data("pageCurrent");
 		var checked = $("#checkAll").prop("checked");
@@ -166,7 +167,7 @@
 
 		console.log("doQueryObjects()");
 		//初始化 页码 pagecurrent 的值为1   在查询的时候，页码初始值也应该是第一页
-		$("#pageId").data("pageCurrent",1);
+		$("#pageId").data("pageNum",1);
 		//重用doget 函数
 		doGetObjects();
 	}
@@ -174,17 +175,18 @@
 
 	//定义分页查询的函数，点进
 	function doGetObjects(){
+
 		//debugger;//断点调试
 		$("#checkAll").prop("checked",false);
 		//1.定义url和参数
 		var url="log/doFindPageObjects";
 		//? 请问data函数的含义是什么？(从指定元素上获取绑定的数据)
 		//此数据会在何时进行绑定？(setPagination,doQueryObjects)
-		var pageCurrent=$("#pageId").data("pageCurrent");
+		var pageCurrent=$("#pageId").data("pageNum");
 		//为什么要执行如下语句的判定，然后初始化pageCurrent的值为1
 		//pageCurrent参数在没有赋值的情况下，默认初始值应该为1.
 		if(!pageCurrent)pageCurrent=1;
-		var params={"pageCurrent":pageCurrent};//pageCurrent=2
+		var params={"pageNum":pageCurrent};//pageCurrent=2
 
 		//此位置要获取查询参数的值 重用
 		var username = $("#searchNameId").val();
@@ -207,7 +209,7 @@
 		//1 是正常数据  1 呈现记录信息   2，呈现分页信息
 		if(result.state == 1){
 			//更新 table 中 tbody 内部的数据
-			doSetTableBodyRows(result.data.records);//将数据呈现在 页面上
+			doSetTableBodyRows(result.data.list);//将数据呈现在 页面上
 			//更新页面 page.html 的数据
 
 			doSetPagination(result.data); //此方法写到page.html中

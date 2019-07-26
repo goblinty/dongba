@@ -10,9 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class DongbaApplicationTests {
 
-    @Autowired
-    private SysLogDao sysLogDao;
-
     @Test
     public void contextLoads() {
     }
