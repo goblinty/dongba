@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.dongba.dao.TyMenuDao">
+
+    <select id="findPageMenus" resultType="map">
+        select t.*,y.name parentName from ty_menus t left join ty_menus y on t.parentId = y.id
+    </select>
+
+    <delete id="deleteMenuById">
+        delete from ty_menus where id = #{id}
+    </delete>
+
+    <select id="findSonCountMenuById" resultType="int">
+        select count(*) from ty_menus where parentId = #{parentId}
+    </select>
+
+    <select id="findZtreeMenuNodes" resultType="com.ty.dongba.vo.Node">
+        select id,name,parentId from ty_menus
+    </select>
+
+    <insert id="insertMenu" parameterType="com.ty.dongba.entity.TyMenu">
+         insert into ty_menus
+        (name,url,type,sort,note,parentId,permission,
+            createdTime,modifiedTime,createdUser,modifiedUser)
+            values
+            (#{name},#{url},#{type},#{sort},#{note},#{parentId},#{permission},
+            now(),now(),#{createdUser},#{modifiedUser})
+    </insert>
+
+    <update id="updatMeunById">
+        update ty_menus set
+
+           name=#{name},
+           type=#{type},
+           sort=#{sort},
+           url=#{url},
+           parentId=#{parentId},
+           permission=#{permission},
+           modifiedUser=#{modifiedUser},
+           modifiedTime=now()
+        where id = #{id}
+    </update>
+</mapper>

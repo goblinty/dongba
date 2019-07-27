@@ -36,8 +36,6 @@
 	  var pageCurrent=$("#pageId").data("pageNum");
 	  var pageCount=$("#pageId").data("pages");
 
-	  console.log("update yema")
-
 	  //1.2基于点击的元素修改页码值
 	  //1.2.1获取class属性的值,$(this)表示被点击的对象
 	  var cls=$(this).prop("class");
@@ -55,7 +53,6 @@
 	  }
 	  //2.基于新的页码,执行下次查询
 	  //2.1存储新的页码值
-	  console.log(pageCurrent)
 	  $("#pageId").data("pageNum",pageCurrent);
 	  //2.2基于新页码值执行查询
 	  doGetObjects();

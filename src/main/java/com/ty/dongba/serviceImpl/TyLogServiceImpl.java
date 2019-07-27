@@ -37,6 +37,13 @@ public class TyLogServiceImpl implements TyLogService {
 
     @Override
     public int deleteLogs(Integer... ids) {
-        return 0;
+
+        if(ids == null || ids.length == 0) throw new ServiceException("请选择一个或多个日志");
+
+        int row = tyLogDao.deleteLogsByIds(ids);
+
+        if (row == 0) throw new ServiceException("删除失败");
+
+        return row;
     }
 }

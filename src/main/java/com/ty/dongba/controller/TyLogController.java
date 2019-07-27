@@ -22,4 +22,14 @@ public class TyLogController {
 
         return new JsonResult(pageLogs);
     }
+
+    @RequestMapping("doDeleteObjById")
+    public JsonResult doDeleteObjById(Integer[] ids){
+
+        tyLogService.deleteLogs(ids);
+
+        return new JsonResult("delete ok lelelel");
+    }
+
+    //空余的 插入之后在做，需要 aop
 }
