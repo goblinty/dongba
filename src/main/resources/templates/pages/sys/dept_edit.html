@@ -101,11 +101,9 @@
 		}
 
 		function doCancel() {
-			$("#mainContentId").load("dept/doDeptListUI", function() {
-				$("#mainContentId").removeData();
-				$("#parentId").removeData();
-			})
-		}
+            var url="menu/menu_list";
+            $("#mainContentId").load(url);
+        }
 		
 		function doSaveOrUpdate() {
 			//1.获取表单数据

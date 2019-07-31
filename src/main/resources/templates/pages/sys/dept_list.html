@@ -86,6 +86,7 @@ function doLoadEditUI(){
 	var title;
 	if($(this).hasClass("btn-add")){
 		title="添加部门"
+
 	}else if($(this).hasClass("btn-update")){
 		title="修改部门"
 		//获取选中的记录数据
@@ -144,6 +145,8 @@ function doGetCheckedId(){
 	}
 }
 function doGetObjects(){
+
+	$("#mainContentId").removeData();
 	//1.构建treeTable对象
 	var tableId="gridTreeTable";
 	var url="dept/doFindObjects";
