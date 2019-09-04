@@ -133,7 +133,7 @@
    function doHandleResponseResult(result){
 	   
 	   if(result.state==1){
-		  doSetTableBodyRows(result.data.records);
+		  doSetTableBodyRows(result.data.list);
 		  doSetPagination(result.data);
 	   }else{
 		  doSetTableBodyErrors(result.message);

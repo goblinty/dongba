@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.dongba.dao.TyRoleDao">
+
+    <sql id="tongyong">
+        <where>
+            <if test="name != null and name !=''">
+                name like concat("%",#{name},"%")
+            </if>
+        </where>
+    </sql>
+
+    <resultMap id="findMenus" type="com.ty.dongba.entity.TyMenuRoleVo">
+
+        <collection property="menuIds" column="id" select="com.ty.dongba.dao.TyMenuRoleDao.findRoleMenuById"
+                    ></collection>
+    </resultMap>
+
+    <select id="findRolesByPage" resultType="tyRole">
+        select * from ty_roles <include refid="tongyong"></include>
+    </select>
+
+    <delete id="deleteById" parameterType="int">
+        delete from ty_roles where id = #{id}
+    </delete>
+
+    <insert id="insertRole" parameterType="com.ty.dongba.entity.TyRole" useGeneratedKeys="true" keyProperty="id">
+        insert into ty_roles (id,name,note,createdTime,modifiedTime,createdUser,modifiedUser)
+        values (null ,#{name},#{note},now(),now(),#{createdUser},#{modifiedUser});
+    </insert>
+
+    <select id="findRoleById" resultMap="findMenus">
+        select id,name,note from ty_roles where id = #{id}
+    </select>
+
+    <update id="updateRole" parameterType="com.ty.dongba.entity.TyRole">
+        update ty_roles
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name}
+            </if>
+            <if test="note!=null and note!=''">
+                note=#{note},
+            </if>
+            <if test="modifiedUser!=null and modifiedUser!=''">
+                modifiedUser=#{modifiedUser},
+            </if>
+            modifiedTime=now()
+        </set>
+        where id=#{id}
+    </update>
+
+</mapper>
