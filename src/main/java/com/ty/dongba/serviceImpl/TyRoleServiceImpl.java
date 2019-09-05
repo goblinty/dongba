@@ -9,9 +9,13 @@ import com.ty.dongba.entity.TyMenuRoleVo;
 import com.ty.dongba.entity.TyRole;
 import com.ty.dongba.exception.ServiceException;
 import com.ty.dongba.service.TyRoleService;
+import com.ty.dongba.vo.CheckBox;
+import com.ty.dongba.vo.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.sql.rowset.serial.SerialException;
 import java.util.List;
@@ -121,5 +125,12 @@ public class TyRoleServiceImpl implements TyRoleService {
         tyMenuRoleDao.insertObjRoleMenu(role.getId(),menusId);
 
         return rows;
+    }
+
+
+    @Override
+    public List<CheckBox> findRoleUser() {
+
+        return tyRoleDao.findObjects();
     }
 }

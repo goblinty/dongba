@@ -2,6 +2,7 @@ package com.ty.dongba.dao;
 
 import com.ty.dongba.entity.TyMenuRoleVo;
 import com.ty.dongba.entity.TyRole;
+import com.ty.dongba.vo.CheckBox;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,4 +27,5 @@ public interface TyRoleDao {
 
     int updateRole(TyRole role);
 
+    List<CheckBox> findObjects();
 }

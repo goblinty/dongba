@@ -141,9 +141,10 @@
    //页面加载完成异步加载当前页数据
    function doGetObjects(){
 	   var url="user/doFindPageObjects";
-	   var pageCurrent=$("#pageId").data("pageCurrent");
+	   var pageCurrent=$("#pageId").data("pageNum");
 	   if(!pageCurrent)pageCurrent=1;
-	   var params={"pageCurrent":pageCurrent}
+	   var params={"pageNum":pageCurrent}
+
 	   params.username=$("#searchNameId").val().trim();
 	   console.log(params);
 	   $.getJSON(url,params,function(result){
@@ -153,7 +154,7 @@
    }
    function doHandleResponseResult(result){
 	   if(result.state==1){
-		  doSetTableBodyRows(result.data.records);
+		  doSetTableBodyRows(result.data.list);
 		  doSetPagination(result.data);
 		}else{
 		  alert(result.message);
@@ -177,7 +178,7 @@
 	   console.log(row);
 	   var tds="<td><input type='radio' name='radioId' value='"+row.id+"' ></td>"+
 	     "<td>"+row.username+"</td>"+
-	     "<td>"+(row.sysDept?row.sysDept.name:'未分配')+"</td>"+
+	     "<td>"+(row.tyDept?row.tyDept.name:'未分配')+"</td>"+
 	     "<td>"+row.email+"</td>"+
 	     "<td>"+row.mobile+"</td>"+
 	     "<td>"+(row.valid?"启用":"禁用")+"</td>"+

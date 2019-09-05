@@ -52,4 +52,7 @@
         where id=#{id}
     </update>
 
+    <select id="findObjects" resultType="com.ty.dongba.vo.CheckBox" >
+        select id,name from ty_roles
+    </select>
 </mapper>

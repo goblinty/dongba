@@ -54,4 +54,10 @@ public class TyRoleController {
 
         return new JsonResult("update ok");
     }
+
+    @RequestMapping("doFindRoles")
+    public JsonResult doFindRoles(){
+
+        return new JsonResult(tyRoleService.findRoleUser());
+    }
 }

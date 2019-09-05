@@ -17,7 +17,6 @@ public class TyLogServiceImpl implements TyLogService {
     @Autowired
     private TyLogDao tyLogDao;
 
-
     @Override
     public PageInfo<TyLog> getPageLogs(String username, Integer pageCurrent) {
 

@@ -11,4 +11,73 @@
          where deptId=#{deptId}
     </select>
 
+    <select id="findPageUserDept" resultMap="tyUserMap" >
+        select * from ty_users <include refid="tongyong"></include>
+
+    </select>
+
+    <update id="validById" >
+        update ty_users set valid = #{valid},modifiedUser = #{modifiedUser}
+            ,modifiedTime = now() where id = #{id}
+
+    </update>
+
+    <insert id="insertUser" parameterType="com.ty.dongba.entity.TyUser"
+            useGeneratedKeys="true" keyProperty="id">
+
+        insert into ty_users
+        (username,password,deptId,email,mobile,salt,valid,
+         createdTime,modifiedTime,createdUser,modifiedUser)
+        values
+        (#{username},#{password},#{deptId},#{email},#{mobile},#{salt},#{valid},
+        now(),now(),#{createdUser},#{modifiedUser})
+
+    </insert>
+
+    <select id="findUserDeptById" resultMap="tyUserMap" parameterType="int">
+        select * from ty_users where id = #{id}
+    </select>
+
+    <update id="updateUser" parameterType="com.ty.dongba.entity.TyUser">
+
+        update ty_users
+        <set>
+            <if test="username!=null and username!=''">
+                username=#{username},
+            </if>
+            <if test="email!=null and email!=''">
+                email=#{email},
+            </if>
+            <if test="mobile!=null and mobile!=''">
+                mobile=#{mobile},
+            </if>
+            <if test="deptId!=null and deptId!=''">
+                deptId=#{deptId},
+            </if>
+
+            <if test="modifiedUser!=null and modifiedUser!=''">
+                modifiedUser=#{modifiedUser},
+            </if>
+            modifiedTime=now()
+        </set>
+        where id=#{id}
+
+    </update>
+    <resultMap id="tyUserMap" type="com.ty.dongba.vo.TyUserDeptVo">
+
+        <!-- 多对一 ，一对一-->
+        <association property="tyDept" column="deptId"
+                     select="com.ty.dongba.dao.TyDeptDao.findById">
+        </association>
+
+    </resultMap>
+
+    <sql id="tongyong">
+
+        <where>
+            <if test="username != null and username!= ''">
+                username like concat("%",#{username},"%")
+            </if>
+        </where>
+    </sql>
 </mapper>
