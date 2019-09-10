@@ -1,11 +1,13 @@
 package com.ty.dongba.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
+@Accessors(chain = true)
 public class TyUser implements Serializable {
 
     private static final long serialVersionUID = -1437228116122161059L;

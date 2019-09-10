@@ -28,7 +28,7 @@
     </delete>
 
     <insert id="insertLog">
-        insert into sys_logs
+        insert into ty_logs
        (username,operation,method,params,time,ip,createdTime)
        values
       (#{username},#{operation},#{method},#{params},#{time},#{ip},#{createdTime})

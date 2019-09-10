@@ -14,7 +14,7 @@ public class TyMenuController {
     @Autowired
     private TyMenuService tyMenuService;
 
-    @RequestMapping("/doFindObjects")
+    @RequestMapping("doFindObjects")
     public JsonResult doFindObjects(){
 
         return new JsonResult(tyMenuService.findPageMenu());

@@ -1,5 +1,6 @@
 package com.ty.dongba.serviceImpl;
 
+import com.ty.dongba.aspect.LogAnn;
 import com.ty.dongba.dao.TyMenuDao;
 import com.ty.dongba.dao.TyMenuRoleDao;
 import com.ty.dongba.entity.TyMenu;
@@ -34,6 +35,7 @@ public class TyMenuServiceImpl implements TyMenuService {
     @Autowired
     private TyMenuRoleDao tyMenuRoleDao;
 
+    @LogAnn
     @Override
     public int deleteMenusById(Integer id) {
 

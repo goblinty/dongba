@@ -2,6 +2,7 @@ package com.ty.dongba.serviceImpl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.ty.dongba.aspect.LogAnn;
 import com.ty.dongba.dao.TyRoleUserDao;
 import com.ty.dongba.dao.TyUserDao;
 import com.ty.dongba.entity.TyUser;
@@ -19,7 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class TyUserServiceImppl implements TyUserService {
+public class TyUserServiceImpl implements TyUserService {
 
 
     @Autowired
@@ -41,6 +42,7 @@ public class TyUserServiceImppl implements TyUserService {
         return info;
     }
 
+    @LogAnn(operation = "变化状态")
     @Override
     public int updateValidById(Integer id, Integer valid, String modifiedUser) {
 

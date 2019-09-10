@@ -20,4 +20,5 @@ public interface TyLogService {
      */
     int deleteLogs(Integer ...ids);
 
+
 }

@@ -1,11 +1,13 @@
 package com.ty.dongba.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
+@Accessors(chain = true)
 public class TyMenu implements Serializable {
 
     private static final long serialVersionUID = -7618705311693389215L;

@@ -45,4 +45,5 @@ public class TyLogServiceImpl implements TyLogService {
 
         return row;
     }
+
 }
